@@ -1,0 +1,10 @@
+[package]
+name = "strange"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+strange-macros = { path = "./strange-macros" }
+
+[features]
+bench = []
