@@ -30,17 +30,19 @@ pub fn end_loop_in_test_or_bench(_args: TokenStream, input: TokenStream) -> Toke
             };
 
             let output = quote! {
-                #[cfg(any(test, feature = "bench"))]
-                let mut end_loop_in_test_or_bench_counter = 0u8;
-
-                loop {
-                    #body
-
+                {
                     #[cfg(any(test, feature = "bench"))]
-                    {
-                        end_loop_in_test_or_bench_counter += 1;
-                        if end_loop_in_test_or_bench_counter > 100 {
-                            break;
+                    let mut end_loop_in_test_or_bench_counter = 0u8;
+
+                    loop {
+                        #body
+
+                        #[cfg(any(test, feature = "bench"))]
+                        {
+                            end_loop_in_test_or_bench_counter += 1;
+                            if end_loop_in_test_or_bench_counter > 100 {
+                                break;
+                            }
                         }
                     }
                 }
