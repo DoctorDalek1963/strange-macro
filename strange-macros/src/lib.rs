@@ -7,8 +7,6 @@ use syn::{spanned::Spanned, Error};
 pub fn end_loop_in_test_or_bench(_args: TokenStream, input: TokenStream) -> TokenStream {
     let input: TokenStream2 = input.into();
     let input_span = input.span();
-    eprintln!("Input:\n{input}\n\n");
-
     let tokens: Vec<_> = input.into_iter().collect();
 
     match tokens.first() {
@@ -29,7 +27,7 @@ pub fn end_loop_in_test_or_bench(_args: TokenStream, input: TokenStream) -> Toke
                 }
             };
 
-            let output = quote! {
+            quote! {
                 {
                     #[cfg(any(test, feature = "bench"))]
                     let mut end_loop_in_test_or_bench_counter = 0u8;
@@ -44,13 +42,10 @@ pub fn end_loop_in_test_or_bench(_args: TokenStream, input: TokenStream) -> Toke
                                 break;
                             }
                         }
-                    }
+                    };
                 }
-            };
-
-            eprintln!("Output:\n{output}\n\n");
-            dbg!(&output);
-            output.into()
+            }
+            .into()
         }
         _ => Error::new(
             input_span,
